@@ -6,12 +6,12 @@ library(googlesheets4)
 library(stringr)
 library(geosphere)
 
-output_location<-"C:/Users/jwest/Documents/geoguessr_cities/DC/output/"
+output_location<-"C:/Users/jwest/github/geoguessr_cities/DC/output/"
 round_no<-3
 
 answers<-read_csv(paste0(output_location,"Round ",round_no,"/locations.csv"))
 
-guesses <- read_sheet("https://docs.google.com/spreadsheets/d/1V-mcfBj6rsc7EGLMdp2UXJCPZ22lUruc1g8JlZjil4s/edit?usp=sharing", sheet=paste0("Sheet",round_no))%>%
+guesses <- read_sheet("https://docs.google.com/spreadsheets/d/1FnSqet68G3hWA0wMUM0Ti-W-PRbS-DMRt4g8zYX5t5s/edit?usp=sharing", sheet=paste0("Sheet",round_no))%>%
   clean_names()%>%
   pivot_longer(cols = starts_with("guess_"), 
                names_to = "seqnum", 
@@ -20,11 +20,7 @@ guesses <- read_sheet("https://docs.google.com/spreadsheets/d/1V-mcfBj6rsc7EGLMd
 
 guesses_processed<-guesses%>%
   filter(!is.na(link))%>%
-  mutate(location_guess = sub(".*!8m2!3d", "", link))%>%
-  mutate(location_guess = sub("!16.*", "", location_guess))%>%
-  mutate(location_guess = sub("!5m1.*", "", location_guess))%>%
-  mutate(location_guess=str_replace(location_guess,"!4d",","))%>%
-  separate(location_guess, into = c("latitude_guess", "longitude_guess"), sep = ",", convert = TRUE)
+  separate(link, into = c("latitude_guess", "longitude_guess"), sep = ",", convert = TRUE)
 
 score_by_location<-answers%>%
   right_join(guesses_processed,by=c("seqnum"))%>%

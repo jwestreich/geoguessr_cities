@@ -20,11 +20,7 @@ guesses <- read_sheet("https://docs.google.com/spreadsheets/d/1V-mcfBj6rsc7EGLMd
 
 guesses_processed<-guesses%>%
   filter(!is.na(link))%>%
-  mutate(location_guess = sub(".*!8m2!3d", "", link))%>%
-  mutate(location_guess = sub("!16.*", "", location_guess))%>%
-  mutate(location_guess = sub("!5m1.*", "", location_guess))%>%
-  mutate(location_guess=str_replace(location_guess,"!4d",","))%>%
-  separate(location_guess, into = c("latitude_guess", "longitude_guess"), sep = ",", convert = TRUE)
+  separate(link, into = c("latitude_guess", "longitude_guess"), sep = ",", convert = TRUE)
 
 score_by_location<-answers%>%
   right_join(guesses_processed,by=c("seqnum"))%>%

@@ -7,8 +7,8 @@ library(googlesheets4)
 library(stringr)
 library(geosphere)
 
-output_location<-"C:/Users/jwest/Documents/geoguessr_cities/DC/output/"
-round_no<-1
+output_location<-"C:/Users/jwest/github/geoguessr_cities/DC/output/"
+round_no<-3
 
 score_by_location<-read_csv(paste0(output_location,"Round ",round_no,"/results by location.csv"))
 

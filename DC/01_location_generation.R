@@ -4,8 +4,8 @@ library(readr)
 library(sf)
 library(httr)
 
-code_base<-"C:/Users/jwest/Documents/geoguessr_cities/DC/"
-output_location<-"C:/Users/jwest/Documents/geoguessr_cities/DC/output/"
+code_base<-"C:/Users/jwest/github/geoguessr_cities/DC"
+output_location<-"C:/Users/jwest/github/geoguessr_cities/DC/output/"
 round_no<-3
 
 # Define the polygon using coordinates
