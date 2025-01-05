@@ -158,6 +158,7 @@ for (i in 1:nrow(locations)){
       "location=", location, "&",
       "heading=", heading, "&",
       "pitch=", pitch, "&",
+      "source=outdoor", "&",
       "key=", api_key
     )
     

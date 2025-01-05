@@ -6,7 +6,7 @@ library(httr)
 
 code_base<-"C:/Users/jwest/github/geoguessr_cities/DC"
 output_location<-"C:/Users/jwest/github/geoguessr_cities/DC/output/"
-round_no<-3
+round_no<-1
 
 # Define the polygon using coordinates
 polygon_coords <- matrix(c(
@@ -68,6 +68,7 @@ for (i in 1:nrow(locations)){
       "location=", location, "&",
       "heading=", heading, "&",
       "pitch=", pitch, "&",
+      "source=outdoor", "&",
       "key=", api_key
     )
     
