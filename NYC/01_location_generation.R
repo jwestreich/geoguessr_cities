@@ -4,16 +4,16 @@ library(readr)
 library(sf)
 library(httr)
 
-code_base<-"C:/Users/jwest/Documents/geoguessr_cities/NYC/"
-output_location<-"C:/Users/jwest/Documents/geoguessr_cities/NYC/output/"
-round_no<-1
+code_base<-"C:/Users/jwest/github/geoguessr_cities/NYC"
+output_location<-"C:/Users/jwest/github/geoguessr_cities/NYC/output/"
+round_no<-2
 
 locations<-data.frame()
 
 
 for (j in 1:10){
   borough_picker<-runif(n=1)
-  borough <- ifelse(borough_picker < 0.5, "Manhattan",
+  borough <- ifelse(borough_picker < 0.45, "Manhattan",
                     ifelse(borough_picker < 0.8, "Brooklyn",
                            ifelse(borough_picker < 0.95,"Queens", 
                                   "Bronx")))

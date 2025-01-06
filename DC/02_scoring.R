@@ -11,7 +11,7 @@ round_no<-3
 
 answers<-read_csv(paste0(output_location,"Round ",round_no,"/locations.csv"))
 
-guesses <- read_sheet("https://docs.google.com/spreadsheets/d/1FnSqet68G3hWA0wMUM0Ti-W-PRbS-DMRt4g8zYX5t5s/edit?usp=sharing", sheet=paste0("Sheet",round_no))%>%
+guesses <- read_sheet("https://docs.google.com/spreadsheets/d/1wlRz9DgH8z2CxAIZNSs_gphTU5dXCvdlvmhNCdrdY3k/edit?usp=sharing", sheet=paste0("Sheet",round_no))%>%
   clean_names()%>%
   pivot_longer(cols = starts_with("guess_"), 
                names_to = "seqnum", 

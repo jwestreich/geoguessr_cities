@@ -7,11 +7,11 @@ library(stringr)
 library(geosphere)
 
 output_location<-"C:/Users/jwest/Documents/geoguessr_cities/NYC/output/"
-round_no<-1
+round_no<-2
 
 answers<-read_csv(paste0(output_location,"Round ",round_no,"/locations.csv"))
 
-guesses <- read_sheet("https://docs.google.com/spreadsheets/d/1V-mcfBj6rsc7EGLMdp2UXJCPZ22lUruc1g8JlZjil4s/edit?usp=sharing", sheet=paste0("Sheet",round_no))%>%
+guesses <- read_sheet("https://docs.google.com/spreadsheets/d/1wlRz9DgH8z2CxAIZNSs_gphTU5dXCvdlvmhNCdrdY3k/edit?usp=sharing", sheet=paste0("Sheet",round_no))%>%
   clean_names()%>%
   pivot_longer(cols = starts_with("guess_"), 
                names_to = "seqnum", 
@@ -25,7 +25,7 @@ guesses_processed<-guesses%>%
 score_by_location<-answers%>%
   right_join(guesses_processed,by=c("seqnum"))%>%
   mutate(distance = distHaversine(cbind(longitude, latitude), cbind(longitude_guess, latitude_guess)) * 3.28084)%>%
-  mutate(score=round(5000 * exp(-10 * distance / 73000),0))
+  mutate(score=round(5000 * exp(-10 * distance / 130000),0))
 
 score_by_team<-score_by_location%>%
   group_by(team_name)%>%

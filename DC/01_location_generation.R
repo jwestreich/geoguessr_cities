@@ -6,7 +6,7 @@ library(httr)
 
 code_base<-"C:/Users/jwest/github/geoguessr_cities/DC"
 output_location<-"C:/Users/jwest/github/geoguessr_cities/DC/output/"
-round_no<-1
+round_no<-3
 
 # Define the polygon using coordinates
 polygon_coords <- matrix(c(

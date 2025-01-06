@@ -8,7 +8,7 @@ library(stringr)
 library(geosphere)
 
 output_location<-"C:/Users/jwest/Documents/geoguessr_cities/NYC/output/"
-round_no<-1
+round_no<-2
 
 score_by_location<-read_csv(paste0(output_location,"Round ",round_no,"/results by location.csv"))
 
