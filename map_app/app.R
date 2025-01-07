@@ -4,6 +4,7 @@ library(tigris)
 library(shiny)
 library(clipr)
 library(dplyr)
+library(googlesheets4)
 
 ui <- fluidPage(
   titlePanel("Geoguessr Cities"),
@@ -42,10 +43,9 @@ ui <- fluidPage(
 )
 
 server <- function(input, output, session) {
-  coords_file <- "coords.csv"
-  if (!file.exists(coords_file)) {
-    write.csv(data.frame(team_name = character(0), location = numeric(0), lat = numeric(0), lng = numeric(0)), coords_file, row.names = FALSE)
-  }
+  gs4_auth(path = "enduring-sign-310821-3890a30b88a6.json") 
+  
+  spreadsheet_id <- "188wl-XhzJ0fz0TCU9zHMOKmARJes0_Is-VX1b9NZgAs"
   
   selected_coords <- reactiveValues(coords = vector("list", 5))
   
@@ -96,14 +96,7 @@ server <- function(input, output, session) {
     all_coords <- bind_rows(all_coords)
     
     if (nrow(all_coords) > 0) {
-      write.table(
-        all_coords,
-        coords_file,
-        append = TRUE,
-        sep = ",",
-        row.names = FALSE,
-        col.names = !file.exists(coords_file)
-      )
+      sheet_append(ss = spreadsheet_id, data = all_coords)
       showNotification("Coordinates and team name saved successfully!", type = "message")
     } else {
       showNotification("Please select points on all maps before submitting.", type = "error")
