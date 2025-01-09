@@ -90,7 +90,13 @@ server <- function(input, output, session) {
     all_coords <- lapply(1:5, function(i) {
       coords <- selected_coords$coords[[i]]
       if (!is.null(coords)) {
-        data.frame(team_name = team_name, location = i, lat = coords["lat"], lng = coords["lng"])
+        data.frame(
+          team_name = team_name,
+          location = i,
+          lat = coords["lat"],
+          lng = coords["lng"],
+          datetime = Sys.time()
+        )
       } else {
         NULL
       }
@@ -99,7 +105,7 @@ server <- function(input, output, session) {
     
     if (nrow(all_coords) > 0) {
       sheet_append(ss = spreadsheet_id, data = all_coords)
-      showNotification("Coordinates and team name saved successfully!", type = "message")
+      showNotification("Responses saved successfully!", type = "message")
     } else {
       showNotification("Please select points on all maps before submitting.", type = "error")
     }
