@@ -5,6 +5,7 @@ library(shiny)
 library(clipr)
 library(dplyr)
 library(googlesheets4)
+#setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 ui <- fluidPage(
   titlePanel("Geoguessr Cities"),
@@ -24,6 +25,7 @@ ui <- fluidPage(
       }
     "))
   ),
+  tags$a(href = "https://drive.google.com/drive/folders/1DcE2ILZFs9kCR51G6fJ5pR4igar7_NYq?usp=sharing", "Link to photos", target = "_blank"),
   fluidRow(
     column(2, tags$h4(tags$b("Pick a city"))),
     column(1, actionButton("dc_button", "DC")),
