@@ -4,68 +4,112 @@ library(tigris)
 library(shiny)
 library(clipr)
 library(dplyr)
+library(googlesheets4)
+#setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
 ui <- fluidPage(
   titlePanel("Geoguessr Cities"),
   tags$head(
     tags$style(HTML("
-      #mapContainer {
-        width: 70%; /* Set the width for portrait ratio */
-        height: 80vh; /* Adjust height as needed */
-        margin: auto; /* Center the map horizontally */
+      .mapContainer {
+        width: 70%;
+        height: 80vh;
+        margin: auto;
+        margin-bottom: 150px; /* Add space between each map */
+      }
+      .mapTitle {
+        text-align: center;
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 10px;
       }
     "))
   ),
+  tags$a(href = "https://drive.google.com/drive/folders/1DcE2ILZFs9kCR51G6fJ5pR4igar7_NYq?usp=sharing", "Link to photos", target = "_blank"),
   fluidRow(
+    column(2, tags$h4(tags$b("Pick a city"))),
     column(1, actionButton("dc_button", "DC")),
     column(1, actionButton("nyc_button", "NYC"))
   ),
-  div(
-    id = "mapContainer",
-    leafletOutput("map", width = "100%", height = "100%")
-  ),
-  verbatimTextOutput("coords"),
-  tags$a(href = "https://drive.google.com/drive/folders/1DHE2YUcJenWKWS2VksRXitA4BsHyy1nB?usp=sharing", "Round 1 photos", target = "_blank"),
-  tags$br(),
-  tags$a(href = "https://drive.google.com/drive/folders/1W5D3R5V12aE42rcHFYG40nUMZHv8E5I6?usp=sharing", "Round 2 photos", target = "_blank"),
-  tags$br(),
-  tags$a(href = "https://drive.google.com/drive/folders/1FZ3foPiVTefv_AGCcyltR1Z2xZgWzy4-?usp=sharing", "Round 3 photos", target = "_blank"),
-  tags$br(),
-  tags$a(href = "https://docs.google.com/spreadsheets/d/1wlRz9DgH8z2CxAIZNSs_gphTU5dXCvdlvmhNCdrdY3k/edit?usp=sharing", "Submit answers here", target = "_blank")
+  textInput("team_name", "Team Name:", value = "", placeholder = "Enter your team name"),
+  lapply(1:5, function(i) {
+    div(
+      class = "mapContainer",
+      div(class = "mapTitle", paste("Location", i)),
+      leafletOutput(paste0("map", i), width = "100%", height = "100%"),
+      tags$br(),
+      textInput(paste0("coords_text", i), paste("Location", i, "Coordinates:"), value = "", placeholder = "Click on the map to get coordinates")
+    )
+  }),
+  actionButton("submit_button", "Submit")
 )
 
 server <- function(input, output, session) {
-  output$map <- renderLeaflet({
-    leaflet(data = tibble(name = character())) %>%
-      addProviderTiles(providers$CartoDB.Positron) %>%
-      setView(lng = -77.0147, lat = 38.8943, zoom = 12)
-  })
+  gs4_auth(path = "enduring-sign-310821-3890a30b88a6.json") 
   
-  observeEvent(input$dc_button, {
-    leafletProxy("map") %>%
-      setView(lng = -77.0147, lat = 38.8943, zoom = 12)
-  })
+  spreadsheet_id <- "188wl-XhzJ0fz0TCU9zHMOKmARJes0_Is-VX1b9NZgAs"
   
-  observeEvent(input$nyc_button, {
-    leafletProxy("map") %>%
-      setView(lng = -73.9431, lat = 40.7212, zoom = 11)
-  })
+  selected_coords <- reactiveValues(coords = vector("list", 5))
   
-  observeEvent(input$map_click, {
-    click <- input$map_click
-    lat <- click$lat
-    lng <- click$lng
+  lapply(1:5, function(i) {
+    output[[paste0("map", i)]] <- renderLeaflet({
+      leaflet(data = tibble(name = character())) %>%
+        addProviderTiles(providers$CartoDB.Positron) %>%
+        setView(lng = -77.0147, lat = 38.8943, zoom = 12)
+    })
     
-    leafletProxy("map") %>%
-      clearMarkers() %>%
-      addMarkers(lng = lng, lat = lat)
+    observeEvent(input$dc_button, {
+      leafletProxy(paste0("map", i)) %>%
+        setView(lng = -77.0147, lat = 38.8943, zoom = 12)
+    })
     
-    lat_lng <- paste(lat, lng, sep = ", ")
-    output$coords <- renderText({
-      paste(lat_lng)
+    observeEvent(input$nyc_button, {
+      leafletProxy(paste0("map", i)) %>%
+        setView(lng = -73.9431, lat = 40.7212, zoom = 11)
+    })
+    
+    observeEvent(input[[paste0("map", i, "_click")]], {
+      click <- input[[paste0("map", i, "_click")]]
+      selected_coords$coords[[i]] <- c(lat = click$lat, lng = click$lng)
+      
+      leafletProxy(paste0("map", i)) %>%
+        clearMarkers() %>%
+        addMarkers(lng = click$lng, lat = click$lat)
+      
+      updateTextInput(session, paste0("coords_text", i), value = paste(click$lat, click$lng, sep = ", "))
     })
   })
+  
+  observeEvent(input$submit_button, {
+    team_name <- input$team_name
+    if (team_name == "") {
+      showNotification("Please enter a team name before submitting.", type = "error")
+      return()
+    }
+    
+    all_coords <- lapply(1:5, function(i) {
+      coords <- selected_coords$coords[[i]]
+      if (!is.null(coords)) {
+        data.frame(
+          team_name = team_name,
+          location = i,
+          lat = coords["lat"],
+          lng = coords["lng"],
+          datetime = Sys.time()
+        )
+      } else {
+        NULL
+      }
+    })
+    all_coords <- bind_rows(all_coords)
+    
+    if (nrow(all_coords) > 0) {
+      sheet_append(ss = spreadsheet_id, data = all_coords)
+      showNotification("Responses saved successfully!", type = "message")
+    } else {
+      showNotification("Please select points on all maps before submitting.", type = "error")
+    }
+  })
 }
-
 
 shinyApp(ui, server)

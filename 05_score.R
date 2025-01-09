@@ -7,19 +7,10 @@ if (city=="NYC"){
   
 answers<-read_csv(paste0(output_location,"Round ",round_no,"/locations.csv"))
 
-guesses <- read_sheet(google_sheet_link, sheet=paste0("Sheet",round_no))%>%
-  clean_names()%>%
-  pivot_longer(cols = starts_with("guess_"), 
-               names_to = "seqnum", 
-               values_to = "link")%>%
-  mutate(seqnum=as.numeric(str_replace(seqnum,"guess_","")))
-
-guesses_processed<-guesses%>%
-  filter(!is.na(link))%>%
-  separate(link, into = c("latitude_guess", "longitude_guess"), sep = ",", convert = TRUE)
+guesses <- read_sheet(google_sheet_link)
 
 score_by_location<-answers%>%
-  right_join(guesses_processed,by=c("seqnum"))%>%
+  right_join(guesses,by=c("seqnum"="location"))%>%
   mutate(distance = distHaversine(cbind(longitude, latitude), cbind(longitude_guess, latitude_guess)) * 3.28084)%>%
   mutate(score=round(5000 * exp(-10 * distance / max_dist),0))
 
