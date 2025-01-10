@@ -34,17 +34,19 @@ for (i in 1:nrow(locations)){
   }
 }
 
-for (i in 1:nrow(locations)){
+if (pano=="on"){
+  for (i in 1:nrow(locations)){
   
-  file_paths <- c(paste0(output_location,"Round ",round_no,"/location_",i,"_image_1.jpg"),
-                  paste0(output_location,"Round ",round_no,"/location_",i,"_image_2.jpg"),
-                  paste0(output_location,"Round ",round_no,"/location_",i,"_image_3.jpg"),
-                  paste0(output_location,"Round ",round_no,"/location_",i,"_image_4.jpg"),
-                  paste0(output_location,"Round ",round_no,"/location_",i,"_image_5.jpg"))
+    file_paths <- c(paste0(output_location,"Round ",round_no,"/location_",i,"_image_1.jpg"),
+                    paste0(output_location,"Round ",round_no,"/location_",i,"_image_2.jpg"),
+                    paste0(output_location,"Round ",round_no,"/location_",i,"_image_3.jpg"),
+                    paste0(output_location,"Round ",round_no,"/location_",i,"_image_4.jpg"),
+                    paste0(output_location,"Round ",round_no,"/location_",i,"_image_5.jpg"))
   
-  images <- lapply(file_paths, image_read)
+    images <- lapply(file_paths, image_read)
   
-  stitched_image <- image_append(image_join(images), stack = FALSE)
+    stitched_image <- image_append(image_join(images), stack = FALSE)
   
-  image_write(stitched_image, paste0(output_location,"Round ",round_no,"/location_",i,"_pano.jpg"))
+    image_write(stitched_image, paste0(output_location,"Round ",round_no,"/location_",i,"_pano.jpg"))
+  }
 }
