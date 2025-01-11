@@ -1,9 +1,11 @@
 if (city=="DC"){
   
   at_large<-at_large_percent
-  downtown<-at_large_percent+at_large
+  downtown<-downtown_percent+at_large
+  greater_central<-greater_central_percent+downtown
+  metro<-metro_percent+greater_central
 
-  if (downtown != 1) {
+  if (metro != 1) {
     stop("Error: Sum of boroughs does not equal 100%")
   }
   
@@ -28,6 +30,19 @@ if (city=="DC"){
     -77.056861, 38.902398, 
     -77.045444, 38.911450 
   ), ncol = 2, byrow = TRUE)
+
+  greater_central_coords <- matrix(c(
+    -77.071324, 38.904877,
+    -77.071323, 38.942876,
+    -77.027723, 38.965969,
+    -77.006524, 38.931387,
+    -76.983436, 38.899866,
+    -76.980088, 38.877886,
+    -77.020513, 38.875749,
+    -77.050640, 38.886504,
+    -77.057420, 38.901337,
+    -77.071324, 38.904877
+    ), ncol = 2, byrow = TRUE)
   
 }
 

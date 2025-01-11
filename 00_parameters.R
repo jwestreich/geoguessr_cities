@@ -12,6 +12,7 @@ library(stringr)
 library(geosphere)
 library(leaflet)
 library(magick)
+library(metro)
 
 city <- "DC"        #DC or NYC
 round_no <- 1
@@ -19,7 +20,9 @@ google_sheet_link<-"https://docs.google.com/spreadsheets/d/188wl-XhzJ0fz0TCU9zHM
 pano<-"off" #on or off to save panorama pictures of locations
 
 at_large_percent<-.5
-downtown_percent<-.5
+downtown_percent<-.1
+greater_central_percent<-.4
+metro_percent<-0
 
 manhattan_percent<-.45
 brooklyn_percent<-.35
