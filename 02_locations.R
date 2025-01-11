@@ -5,7 +5,10 @@ for (j in 1:10){
   borough_picker<-runif(n=1)
   
   if (city=="DC"){
-    borough<-"DC"
+    borough <- case_when(
+      city == "DC" & borough_picker <= at_large ~ "At Large",
+      city == "DC" & borough_picker <= downtown ~ "Downtown"
+    )
   }
   
   if (city=="NYC"){
@@ -17,8 +20,11 @@ for (j in 1:10){
     )
   }
   
-  if (borough == "DC") {
-    polygon_coords<-dc_coords
+  if (borough == "At Large") {
+    polygon_coords<-at_large_coords
+  }
+  if (borough == "Downtown") {
+    polygon_coords<-downtown_coords
   }
   if (borough == "Manhattan") {
     polygon_coords<-manhattan_coords

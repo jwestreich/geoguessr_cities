@@ -18,6 +18,9 @@ round_no <- 1
 google_sheet_link<-"https://docs.google.com/spreadsheets/d/188wl-XhzJ0fz0TCU9zHMOKmARJes0_Is-VX1b9NZgAs/edit?usp=sharing"
 pano<-"off" #on or off to save panorama pictures of locations
 
+at_large_percent<-.5
+downtown_percent<-.5
+
 manhattan_percent<-.45
 brooklyn_percent<-.35
 queens_percent<-.15
