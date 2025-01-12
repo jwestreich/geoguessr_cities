@@ -28,32 +28,42 @@ for (j in 1:10){
   if (borough == "Downtown") {
     polygon_coords<-downtown_coords
   }
-  # if (borough == "Metro") {
-  #   metro_station<-rail_stations(LineCode = NULL, api_key = wmata_key())%>%
-  #     filter(State=="DC" & StationName!="Friendship Heights" & StationName!="Deanwood")%>%
-  #     select(StationName,Lat,Lon)%>%
-  #     distinct()%>%
-  #     mutate(lat1=Lat+(1/3640),
-  #            lat2=Lat+(1/3640),
-  #            lat3=Lat-(1/3640),
-  #            lat4=Lat-(1/3640))%>%
-  #     mutate(lon1=Lon+(1/2882),
-  #            lon2=Lon-(1/2882),
-  #            lon3=Lon+(1/2882),
-  #            lon4=Lon-(1/2882))%>%
-  #     mutate(rand=runif(n()))%>%
-  #     filter(rand==min(rand))
-  #   
-  #   metro_coords <- matrix(c(
-  #     metro_station$lon1, metro_station$lat1,
-  #     metro_station$lon2, metro_station$lat2,
-  #     metro_station$lon3, metro_station$lat3,
-  #     metro_station$lon4, metro_station$lat4, 
-  #     metro_station$lon1, metro_station$lat1
-  #   ), ncol = 2, byrow = TRUE)
-  #   
-  #   polygon_coords<-metro_coords
-  # }
+  if (borough == "Metro") {
+    metro_station<-rail_stations(LineCode = NULL, api_key = wmata_key(Sys.getenv("WMATA_API_KEY")))%>%
+      filter(State=="DC" & StationName!="Friendship Heights" & StationName!="Deanwood" & StationName!="Takoma")%>%
+      select(StationName,Lat,Lon)%>%
+      distinct()%>%
+      mutate(rand=runif(n()))%>%
+      filter(rand==min(rand))
+
+    # Extract latitude and longitude from the dataframe
+    lat <- metro_station$Lat
+    lon <- metro_station$Lon
+    
+    # Function to calculate the new coordinates given distance and bearing
+    get_new_coords <- function(lat, lon, distance_ft, bearing) {
+      distance_m <- distance_ft * 0.3048 # Convert feet to meters
+      dest_point <- destPoint(c(lon, lat), b = bearing, d = distance_m)
+      return(dest_point)
+    }
+    
+    # Calculate the new coordinates for the 4 points
+    nw_point <- get_new_coords(lat, lon, 100, 315) # Northwest (bearing 315 degrees)
+    ne_point <- get_new_coords(lat, lon, 100, 45)  # Northeast (bearing 45 degrees)
+    se_point <- get_new_coords(lat, lon, 100, 135) # Southeast (bearing 135 degrees)
+    sw_point <- get_new_coords(lat, lon, 100, 225) # Southwest (bearing 225 degrees)
+    
+    # Create the matrix with the coordinates
+    metro_coords <- matrix(c(
+      nw_point[1], nw_point[2],
+      ne_point[1], ne_point[2],
+      se_point[1], se_point[2],
+      sw_point[1], sw_point[2],
+      nw_point[1], nw_point[2] # Close the loop
+    ), ncol = 2, byrow = TRUE)
+    
+    polygon_coords<-metro_coords
+  }
   if (borough == "Manhattan") {
     polygon_coords<-manhattan_coords
   }
