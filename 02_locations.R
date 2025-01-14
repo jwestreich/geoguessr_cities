@@ -101,8 +101,8 @@ for (j in 1:10){
   # Convert to dataframe with latitude and longitude
   location_single <- st_coordinates(generate_random_points(polygon_sf, n = 1)) %>%
     as_tibble() %>%
-    rename(longitude = X, latitude = Y)%>%
-    mutate(location=paste0(latitude,",",longitude),
+    rename(longitude_draft = X, latitude_draft = Y)%>%
+    mutate(location=paste0(latitude_draft,",",longitude_draft),
            borough=borough)
   
   locations_draft<-bind_rows(locations_draft, location_single)
