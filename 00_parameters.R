@@ -13,6 +13,7 @@ library(geosphere)
 library(leaflet)
 library(magick)
 library(metro)
+library(gtfstools)
 
 city <- "DC"        #DC or NYC
 round_no <- 1
@@ -28,6 +29,7 @@ manhattan_percent<-.45
 brooklyn_percent<-.35
 queens_percent<-.15
 bronx_percent<-.05
+subway_percent<-0
 
 code_base<-paste0("C:/Users/jwest/github/geoguessr_cities/",city)
 output_location<-paste0("C:/Users/jwest/github/geoguessr_cities/",city,"/output/")

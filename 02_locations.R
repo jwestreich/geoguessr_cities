@@ -18,7 +18,8 @@ for (j in 1:10){
       city == "NYC" & borough_picker <= manhattan ~ "Manhattan",
       city == "NYC" & borough_picker <= brooklyn ~ "Brooklyn",
       city == "NYC" & borough_picker <= queens ~ "Queens",
-      city == "NYC" & borough_picker <= bronx ~ "Bronx"
+      city == "NYC" & borough_picker <= bronx ~ "Bronx",
+      city == "NYC" & borough_picker <= subway ~ "Subway"
     )
   }
   
@@ -76,6 +77,45 @@ for (j in 1:10){
   if (borough == "Bronx") {
     polygon_coords<-bronx_coords
   }
+  if (borough == "Subway") {
+
+    subway_station <- gtfs_data$stops%>%
+      filter(location_type==1)%>%
+      filter(stop_lon>-74.051977)%>%
+      select(stop_name,Lon=stop_lon,Lat=stop_lat)%>%
+      distinct()%>%
+      mutate(rand=runif(n()))%>%
+      filter(rand==min(rand))
+    
+    # Extract latitude and longitude from the dataframe
+    lat <- subway_station$Lat
+    lon <- subway_station$Lon
+    
+    # Function to calculate the new coordinates given distance and bearing
+    get_new_coords <- function(lat, lon, distance_ft, bearing) {
+      distance_m <- distance_ft * 0.3048 # Convert feet to meters
+      dest_point <- destPoint(c(lon, lat), b = bearing, d = distance_m)
+      return(dest_point)
+    }
+    
+    # Calculate the new coordinates for the 4 points
+    nw_point <- get_new_coords(lat, lon, 100, 315) # Northwest (bearing 315 degrees)
+    ne_point <- get_new_coords(lat, lon, 100, 45)  # Northeast (bearing 45 degrees)
+    se_point <- get_new_coords(lat, lon, 100, 135) # Southeast (bearing 135 degrees)
+    sw_point <- get_new_coords(lat, lon, 100, 225) # Southwest (bearing 225 degrees)
+    
+    # Create the matrix with the coordinates
+    subway_coords <- matrix(c(
+      nw_point[1], nw_point[2],
+      ne_point[1], ne_point[2],
+      se_point[1], se_point[2],
+      sw_point[1], sw_point[2],
+      nw_point[1], nw_point[2] # Close the loop
+    ), ncol = 2, byrow = TRUE)
+    
+    polygon_coords<-subway_coords
+  }
+  
   
   # Create an sf polygon
   polygon_sf <- st_sfc(st_polygon(list(polygon_coords)), crs = 4326)
