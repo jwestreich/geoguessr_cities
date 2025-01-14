@@ -53,8 +53,9 @@ if (city=="NYC"){
   brooklyn<-brooklyn_percent+manhattan
   queens<-queens_percent+brooklyn
   bronx<-bronx_percent+queens
+  subway<-subway_percent+bronx
   
-  if (bronx != 1) {
+  if (subway != 1) {
     stop("Error: Sum of boroughs does not equal 100%")
   }
   
@@ -138,6 +139,13 @@ if (city=="NYC"){
     -73.925643, 40.878535,
     -73.910848, 40.915267
   ), ncol = 2, byrow = TRUE)
+  
+  if (subway_percent>0){
+    temp_file <- tempfile(fileext = ".zip")
+    download.file("http://web.mta.info/developers/data/nyct/subway/google_transit.zip", temp_file)
+  
+    gtfs_data <- read_gtfs(temp_file)
+  }
 
 }
   
