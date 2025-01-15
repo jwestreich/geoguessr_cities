@@ -36,7 +36,9 @@ for (i in 1:length(seqnum_list)){
       lng = ~longitude_guess, lat = ~latitude_guess, 
       color = "black", stroke = TRUE, weight = 2,
       fillColor = "red", fillOpacity = 1, radius = 5,
-      popup = ~paste(team_name,"\nScore: ",score)
+      popup = ~paste(team_name,
+                     "<br>","Distance: ",distance_label,
+                     "<br>","Score: ",score)
     )
     
   if (city=="DC"){

@@ -16,7 +16,10 @@ guesses <- read_sheet(google_sheet_link)%>%
 score_by_location<-answers%>%
   right_join(guesses,by=c("seqnum"="location"))%>%
   mutate(distance = distHaversine(cbind(longitude, latitude), cbind(longitude_guess, latitude_guess)) * 3.28084)%>%
-  mutate(score=round(5000 * exp(-10 * distance / max_dist),0))
+  mutate(score=round(5000 * exp(-10 * distance / max_dist),0))%>%
+  mutate(distance_label=ifelse(
+    distance<5280,paste0(round(distance,0)," ft"),
+                  paste0(round(distance/5280,1)," mi")))
 
 score_by_team<-score_by_location%>%
   group_by(team_name)%>%
