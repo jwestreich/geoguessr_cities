@@ -49,10 +49,10 @@ for (j in 1:10){
     }
     
     # Calculate the new coordinates for the 4 points
-    nw_point <- get_new_coords(lat, lon, 100, 315) # Northwest (bearing 315 degrees)
-    ne_point <- get_new_coords(lat, lon, 100, 45)  # Northeast (bearing 45 degrees)
-    se_point <- get_new_coords(lat, lon, 100, 135) # Southeast (bearing 135 degrees)
-    sw_point <- get_new_coords(lat, lon, 100, 225) # Southwest (bearing 225 degrees)
+    nw_point <- get_new_coords(lat, lon, metro_distance, 315) # Northwest (bearing 315 degrees)
+    ne_point <- get_new_coords(lat, lon, metro_distance, 45)  # Northeast (bearing 45 degrees)
+    se_point <- get_new_coords(lat, lon, metro_distance, 135) # Southeast (bearing 135 degrees)
+    sw_point <- get_new_coords(lat, lon, metro_distance, 225) # Southwest (bearing 225 degrees)
     
     # Create the matrix with the coordinates
     metro_coords <- matrix(c(
@@ -99,10 +99,10 @@ for (j in 1:10){
     }
     
     # Calculate the new coordinates for the 4 points
-    nw_point <- get_new_coords(lat, lon, 100, 315) # Northwest (bearing 315 degrees)
-    ne_point <- get_new_coords(lat, lon, 100, 45)  # Northeast (bearing 45 degrees)
-    se_point <- get_new_coords(lat, lon, 100, 135) # Southeast (bearing 135 degrees)
-    sw_point <- get_new_coords(lat, lon, 100, 225) # Southwest (bearing 225 degrees)
+    nw_point <- get_new_coords(lat, lon, subway_distance, 315) # Northwest (bearing 315 degrees)
+    ne_point <- get_new_coords(lat, lon, subway_distance, 45)  # Northeast (bearing 45 degrees)
+    se_point <- get_new_coords(lat, lon, subway_distance, 135) # Southeast (bearing 135 degrees)
+    sw_point <- get_new_coords(lat, lon, subway_distance, 225) # Southwest (bearing 225 degrees)
     
     # Create the matrix with the coordinates
     subway_coords <- matrix(c(
