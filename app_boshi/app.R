@@ -5,9 +5,10 @@ library(shiny)
 library(clipr)
 library(dplyr)
 library(googlesheets4)
-#setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+library(shinyjs)
 
 ui <- fluidPage(
+  useShinyjs(),
   titlePanel("NYC Geoguesser Party @ Boshi's"),
   tags$head(
     tags$style(HTML("
@@ -15,7 +16,7 @@ ui <- fluidPage(
         width: 70%;
         height: 80vh;
         margin: auto;
-        margin-bottom: 150px; /* Add space between each map */
+        margin-bottom: 150px;
       }
       .mapTitle {
         text-align: center;
@@ -23,12 +24,23 @@ ui <- fluidPage(
         font-weight: bold;
         margin-bottom: 10px;
       }
+      .hidden {
+        display: none;
+      }
     "))
   ),
   tags$a(href = "https://drive.google.com/drive/folders/1DcE2ILZFs9kCR51G6fJ5pR4igar7_NYq?usp=sharing", "Link to photos", target = "_blank"),
   textInput("team_name", "Team Name:", value = "", placeholder = "Enter your team name"),
+  
+  fluidRow(
+    column(2, tags$h4(tags$b("Number of Locations this Round"))),
+    column(2, actionButton("show_five", "5-Location Round")),
+    column(2, actionButton("show_one", "1-Location Round"))
+  ),
+  
   lapply(1:5, function(i) {
     div(
+      id = paste0("map_container", i),
       class = "mapContainer",
       div(class = "mapTitle", paste("Location", i)),
       leafletOutput(paste0("map", i), width = "100%", height = "100%"),
@@ -36,6 +48,7 @@ ui <- fluidPage(
       textInput(paste0("coords_text", i), paste("Location", i, "Coordinates:"), value = "", placeholder = "Click on the map to get coordinates")
     )
   }),
+  
   actionButton("submit_button", "Submit")
 )
 
@@ -44,13 +57,28 @@ server <- function(input, output, session) {
   
   spreadsheet_id <- "188wl-XhzJ0fz0TCU9zHMOKmARJes0_Is-VX1b9NZgAs"
   
-  selected_coords <- reactiveValues(coords = vector("list", 5))
+  selected_coords <- reactiveValues(coords = vector("list", 5), num_maps = 5)
+  
+  observeEvent(input$show_five, {
+    selected_coords$num_maps <- 5
+    lapply(1:5, function(i) {
+      shinyjs::show(paste0("map_container", i))
+    })
+  })
+  
+  observeEvent(input$show_one, {
+    selected_coords$num_maps <- 1
+    lapply(2:5, function(i) {
+      shinyjs::hide(paste0("map_container", i))
+    })
+    shinyjs::show("map_container1")
+  })
   
   lapply(1:5, function(i) {
     output[[paste0("map", i)]] <- renderLeaflet({
       leaflet(data = tibble(name = character())) %>%
         addProviderTiles(providers$CartoDB.Positron) %>%
-        setView(lng = -73.9431, lat = 40.7212, zoom = 11)  # NYC view
+        setView(lng = -73.9431, lat = 40.7212, zoom = 11)
     })
     
     observeEvent(input[[paste0("map", i, "_click")]], {
@@ -72,7 +100,7 @@ server <- function(input, output, session) {
       return()
     }
     
-    all_coords <- lapply(1:5, function(i) {
+    all_coords <- lapply(1:selected_coords$num_maps, function(i) {
       coords <- selected_coords$coords[[i]]
       if (!is.null(coords)) {
         data.frame(
