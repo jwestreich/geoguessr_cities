@@ -5,7 +5,7 @@ account: jaysrshinyapps
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 13918608
-bundleId: 9755709
+bundleId: 9765937
 url: https://jaysrshinyapps.shinyapps.io/app_boshi/
 version: 1
 asMultiple: FALSE

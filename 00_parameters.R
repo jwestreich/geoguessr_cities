@@ -15,7 +15,7 @@ library(magick)
 library(metro)
 library(gtfstools)
 
-city <- "DC"        #DC or NYC
+city <- "NYC"        #DC or NYC
 round_no <- 1
 google_sheet_link<-"https://docs.google.com/spreadsheets/d/188wl-XhzJ0fz0TCU9zHMOKmARJes0_Is-VX1b9NZgAs/edit?usp=sharing"
 pano<-"off" #on or off to save panorama pictures of locations
