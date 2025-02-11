@@ -5,7 +5,7 @@ account: jaysrshinyapps
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 13659488
-bundleId: 9624823
+bundleId: 9779140
 url: https://jaysrshinyapps.shinyapps.io/map_app/
 version: 1
 asMultiple: FALSE
