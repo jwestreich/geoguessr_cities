@@ -36,7 +36,7 @@ ggplot(df, aes(x = dist_miles)) +
     aes(
       x = dist_miles,
       y = highlights,
-      label = ifelse(!is.na(highlights), paste0(round(dist_miles, 1), " miles"), NA)
+      label = ifelse(!is.na(highlights), sprintf("%.1f miles", round(dist_miles, 1)), NA)
     ),
     hjust = -0.3,
     vjust = -0.2,
@@ -77,4 +77,4 @@ ggplot(df, aes(x = dist_miles)) +
     axis.text.y = element_text(color = "black", size=12),
     axis.line.y = element_line()
   )
-
+ggsave(geoguesser_score_nyc.png", width = 5, height = 5, units = "in")

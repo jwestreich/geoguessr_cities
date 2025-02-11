@@ -51,6 +51,8 @@ if (nrow(locations) < 5) {
   stop("Less than 5 valid locations found")
 }
 
+#locations$location[1]<-"40.716847,-73.936363"
+
 write_csv(locations, paste0(output_location,"Round ",round_no,"/locations.csv"))
 
 
