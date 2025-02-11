@@ -10,10 +10,14 @@ library(shinyjs)
 ui <- fluidPage(
   useShinyjs(),
   
+  tags$head(tags$style(".hidden-title { display: none; }")),
+  h1("LocalGuessr DC", class = "hidden-title"),
+  textOutput("example"),
+  
   tags$head(
     tags$style(HTML("
       body {
-        background-image: url('https://file.garden/Zy75IlKnFHAuCMr4/subtletiles.png');
+        background-image: url('https://raw.githubusercontent.com/jwestreich/geoguessr_cities/refs/heads/main/DC/background2.png');
         background-size: 400px;
         background-repeat: repeat;
         min-height: 100vh;
