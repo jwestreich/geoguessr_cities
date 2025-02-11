@@ -39,8 +39,8 @@ ui <- fluidPage(
         display: none;
       }
       .btn {
-        background-color: #45A8F5 !important;
-        border-color: #45A8F5 !important;
+        background-color: #6eb7f0 !important;
+        border-color: #6eb7f0 !important;
         color: black !important;
         font-weight: bold !important;
         transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
