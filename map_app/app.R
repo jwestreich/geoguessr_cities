@@ -7,18 +7,18 @@ library(dplyr)
 library(googlesheets4)
 library(shinyjs)
 
+#background-image: url('https://raw.githubusercontent.com/jwestreich/geoguessr_cities/refs/heads/main/DC/background.png');
+
 ui <- fluidPage(
   useShinyjs(),
   
-  tags$head(tags$style(".hidden-title { display: none; }")),
-  h1("LocalGuessr DC", class = "hidden-title"),
-  textOutput("example"),
+  tags$title("LocalGuessr DC"),
   
   tags$head(
     tags$style(HTML("
       body {
-        background-image: url('https://raw.githubusercontent.com/jwestreich/geoguessr_cities/refs/heads/main/DC/background2.png');
-        background-size: 400px;
+        background-image: url('https://raw.githubusercontent.com/jwestreich/geoguessr_cities/refs/heads/main/DC/background3.png');
+        background-size: 250px;
         background-repeat: repeat;
         min-height: 100vh;
         max-height: 100vh;
@@ -76,6 +76,16 @@ ui <- fluidPage(
         text-align: left;
         margin-top: 10px;
       }
+      .team-name-label {
+        font-size: 20px !important;
+        font-weight: bold;
+        filter: drop-shadow(2px 2px 0.12rem lightgray);
+      }
+      .round-label {
+        font-size: 20px !important;
+        font-weight: bold;
+        filter: drop-shadow(2px 2px 0.12rem lightgray);
+      }
     "))
   ),
   
@@ -89,12 +99,10 @@ ui <- fluidPage(
   
   tags$div(class = "spacer"),
   
-  textInput("team_name", "Team Name:", value = "", placeholder = "Enter your team name", width = "80%"),
-  
-  #  tags$div(class = "spacer_large"),
+  textInput("team_name", tags$span("Team Name:", class = "team-name-label"), value = "", placeholder = "Enter your team name", width = "80%"),
   
   fluidRow(
-    column(6, tags$h4(tags$b(tags$span("Number of Locations"), tags$br(), tags$span("this Round")))),
+    column(6, tags$h4(tags$b(tags$span("Number of Locations", class = "round-label"), tags$br(), tags$span("this Round", class = "round-label")))),
     column(2, actionButton("show_five", "5 maps", class = "btn")),
     column(2, actionButton("show_one", "1 map", class = "btn"))
   ),
@@ -112,9 +120,9 @@ ui <- fluidPage(
   
   actionButton("submit_button", "Submit", class = "wide-btn"),
   
-  tags$div(class = "spacer"),
-  
+  tags$div(class = "spacer")
 )
+
 
 server <- function(input, output, session) {
   gs4_auth(path = "enduring-sign-310821-3890a30b88a6.json") 
