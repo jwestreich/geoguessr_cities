@@ -27,11 +27,11 @@ greater_central_percent<-0
 metro_percent<-0
 metro_distance<-100 #distance from metro stations, in feet
 
-manhattan_percent<-.45
-brooklyn_percent<-.35
-queens_percent<-.15
-bronx_percent<-.05
-subway_percent<-0
+manhattan_percent<-.43
+brooklyn_percent<-.32
+queens_percent<-.12
+bronx_percent<-.03
+subway_percent<-.10
 subway_distance<-100 #distance from subway stations, in feet
 
 code_base<-paste0("C:/Users/jwest/github/geoguessr_cities/")
