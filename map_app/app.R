@@ -75,7 +75,7 @@ ui <- fluidPage(
     "))
   ),
   
-  tags$img(src = "https://file.garden/Z6qa6jS9ZGKtBZjZ/localguessr%2Bpylon.PNG", class = "header-image"),
+  tags$img(src = "https://raw.githubusercontent.com/jwestreich/geoguessr_cities/refs/heads/main/DC/localguessr%2Bpylon.PNG", class = "header-image"),
   
   tags$div(class = "spacer"),
   
