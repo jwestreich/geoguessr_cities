@@ -31,7 +31,7 @@ ui <- fluidPage(
         height: 40vh;
         margin: auto;
         margin-bottom: 150px;
-        filter: drop-shadow(2px 2px 0.12rem lightgray);
+        filter: drop-shadow(5px 5px 0.12rem lightgray);
       }
       .mapTitle {
         text-align: left;
@@ -150,7 +150,12 @@ server <- function(input, output, session) {
     output[[paste0("map", i)]] <- renderLeaflet({
       leaflet(data = tibble(name = character())) %>%
         addProviderTiles(providers$CartoDB.Positron) %>%
-        setView(lng = -77.0147, lat = 38.9031, zoom = 11)
+        setView(lng = -77.0147, lat = 38.9031, zoom = 11)%>%
+        htmlwidgets::onRender("
+    function(el, x) {
+      el.style.border = '1px solid black';
+    }
+  ")
     })
     
     observeEvent(input[[paste0("map", i, "_click")]], {
