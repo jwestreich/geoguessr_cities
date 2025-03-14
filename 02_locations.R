@@ -147,3 +147,19 @@ for (j in 1:10){
   
   locations_draft<-bind_rows(locations_draft, location_single)
 }
+
+locations_draft$row_num=seq_len(nrow(locations_draft))
+
+locations_draft_spaced<-locations_draft%>%
+  cross_join(locations_draft)%>%
+  filter(row_num.x!=row_num.y)%>%
+  mutate(distance = distHaversine(cbind(longitude_draft.x, latitude_draft.x), cbind(longitude_draft.y, latitude_draft.y)))%>%
+  group_by(row_num.x)%>%
+  mutate(min_dist=min(distance,na.rm=T))%>%
+  filter(min_dist>=314)%>%
+  ungroup()%>%
+  select(longitude_draft=longitude_draft.x,
+         latitude_draft=latitude_draft.x,
+         location=location.x,
+         borough=borough.x)%>%
+  distinct()

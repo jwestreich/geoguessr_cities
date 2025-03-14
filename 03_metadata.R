@@ -1,4 +1,4 @@
-locations <- locations_draft %>%
+locations <- locations_draft_spaced %>%
   rowwise() %>%
   mutate(
     valid = {
