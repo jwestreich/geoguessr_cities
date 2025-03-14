@@ -1,7 +1,7 @@
 library(dplyr)
 library(ggplot2)
 
-city<-"NYC"
+city<-"DC"
 
 if(city=="DC"){
   max_dist=73000
@@ -77,4 +77,4 @@ ggplot(df, aes(x = dist_miles)) +
     axis.text.y = element_text(color = "black", size=12),
     axis.line.y = element_line()
   )
-ggsave(geoguesser_score_nyc.png", width = 5, height = 5, units = "in")
+ggsave("geoguesser_score_DC.png", width = 5, height = 5, units = "in")

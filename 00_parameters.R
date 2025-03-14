@@ -15,17 +15,17 @@ library(magick)
 library(metro)
 library(gtfstools)
 
-city <- "NYC"        #DC or NYC
+city <- "DC"        #DC or NYC
 round_no <- 1
 google_sheet_link<-"https://docs.google.com/spreadsheets/d/188wl-XhzJ0fz0TCU9zHMOKmARJes0_Is-VX1b9NZgAs/edit?usp=sharing"
 pano<-"off" #on or off to save panorama pictures of locations
 auto_run<-"yes"
 
-at_large_percent<-1
-downtown_percent<-0
-greater_central_percent<-0
-metro_percent<-0
-metro_distance<-100 #distance from metro stations, in feet
+at_large_percent<-.5
+downtown_percent<-.15
+greater_central_percent<-.25
+metro_percent<-.1
+metro_distance<-150 #distance from metro stations, in feet
 
 manhattan_percent<-.43
 brooklyn_percent<-.32

@@ -31,17 +31,25 @@ write_csv(score_by_team, paste0(output_location,"Round ",round_no,"/results by t
 if (round_no==1){
   scores_cumulative<-score_by_team%>%
     group_by(team_name)%>%
-    summarise(cumulative_score=sum(score,na.rm=T))%>%
+    summarise(round1_score=sum(score,na.rm=T),
+              cumulative_score=sum(score,na.rm=T)
+    )%>%
     arrange(desc(cumulative_score))
 }
 
 if (round_no==2){
-  score_round1<-read_csv(paste0(output_location,"Round ","1","/results by team.csv"))
+  score_round1<-read_csv(paste0(output_location,"Round ","1","/results by team.csv"))%>%
+    rename(round1_score=score)
   
   scores_cumulative<-score_by_team%>%
-    bind_rows(score_round1)%>%
+    full_join(score_round1,by=c("team_name"))%>%
+    rename(round2_score=score)%>%
+    mutate(round1_score=ifelse(is.na(round1_score),0,round1_score),
+           round2_score=ifelse(is.na(round2_score),0,round2_score)
+    )%>%
     group_by(team_name)%>%
-    summarise(cumulative_score=sum(score,na.rm=T))%>%
+    mutate(cumulative_score=sum(round1_score+round2_score,na.rm=T))%>%
+    select(team_name,round1_score,round2_score,cumulative_score)%>%
     arrange(desc(cumulative_score))
 }
 
@@ -50,9 +58,17 @@ if (round_no==3){
   score_round2<-read_csv(paste0(output_location,"Round ","2","/results by team.csv"))
   
   scores_cumulative<-score_by_team%>%
-    bind_rows(score_round1)%>%
-    bind_rows(score_round2)%>%
+    rename(round3_score=score)%>%
+    full_join(score_round1,by=c("team_name"))%>%
+    rename(round1_score=score)%>%
+    full_join(score_round2,by=c("team_name"))%>%
+    rename(round2_score=score)%>%
+    mutate(round1_score=ifelse(is.na(round1_score),0,round1_score),
+           round2_score=ifelse(is.na(round2_score),0,round2_score),
+           round3_score=ifelse(is.na(round3_score),0,round3_score)
+    )%>%
     group_by(team_name)%>%
-    summarise(cumulative_score=sum(score,na.rm=T))%>%
+    mutate(cumulative_score=sum(round1_score+round2_score+round3_score,na.rm=T))%>%
+    select(team_name,round1_score,round2_score,round3_score,cumulative_score)%>%
     arrange(desc(cumulative_score))
 }

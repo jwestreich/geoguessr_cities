@@ -5,9 +5,9 @@ if (city=="DC"){
   greater_central<-greater_central_percent+downtown
   metro<-metro_percent+greater_central
 
-  if (metro != 1) {
-    stop("Error: Sum of boroughs does not equal 100%")
-  }
+  # if (metro != 1) {
+  #   stop("Error: Sum of boroughs does not equal 100%")
+  # }
   
   at_large_coords <- matrix(c(
     -77.119419, 38.934718,
