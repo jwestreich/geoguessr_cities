@@ -56,36 +56,37 @@ greater_central_coords <- matrix(c(
 ), ncol = 2, byrow = TRUE)
 
 leaflet() %>%
-  addTiles() %>%
+  addProviderTiles(providers$CartoDB.Positron) %>%
   addPolygons(
     lng = at_large_coords[, 1],
     lat = at_large_coords[, 2],
-    color = "yellow",
-    weight = 2,
-    fillColor = "yellow",
-    fillOpacity = 0.5
-  )%>%
-  addPolygons(
-    lng = downtown_coords[, 1],
-    lat = downtown_coords[, 2],
-    color = "green",
-    weight = 2,
-    fillColor = "green",
-    fillOpacity = 0.5
-  )%>%
+    color = NA,
+    weight = 0,
+    fillColor = "blue",
+    fillOpacity = 0.3
+  ) %>%
   addPolygons(
     lng = greater_central_coords[, 1],
     lat = greater_central_coords[, 2],
-    color = "blue",
-    weight = 2,
+    color = NA,
+    weight = 0,
     fillColor = "blue",
-    fillOpacity = 0.5
-  )%>%
+    fillOpacity = 0.2
+  ) %>%
+  addPolygons(
+    lng = downtown_coords[, 1],
+    lat = downtown_coords[, 2],
+    color = NA,
+    weight = 0,
+    fillColor = "blue",
+    fillOpacity = 0.2
+  ) %>%
   addCircleMarkers(
     lng = metro_stations$Lon,
     lat = metro_stations$Lat,
     radius = 4,
-    color = "red",
-    fillColor = "red",
-    fillOpacity = .3
+    color = NA,
+    fillColor = "blue",
+    fillOpacity = 0.3
   )
+

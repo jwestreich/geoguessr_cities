@@ -54,4 +54,8 @@ for (i in 1:length(seqnum_list)){
   # Render the map
   print(max(filtered_data$seqnum))
   print(map)
+  
+  # Save the map as an HTML file
+  saveWidget(map, file = paste0(output_location, "round_", round_no, "_location_",  max(filtered_data$seqnum), ".html"), selfcontained = TRUE)
+  
 }
