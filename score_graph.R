@@ -11,7 +11,12 @@ if(city=="NYC"){
 }
 
 df <- data.frame(distance = 0:max_dist) %>%
-  mutate(score = round(5000 * exp(-10 * distance / max_dist), 0)) %>%
+#  mutate(score = round(5000 * exp(-10 * distance / max_dist), 0)) %>%
+  mutate(score=5000 * exp(-10 * distance / max_dist))%>%
+  mutate(score=ifelse(distance<5280,score*1.02,score))%>%
+  mutate(score=ifelse(distance<160,5000,score))%>%
+  mutate(score=ifelse(score>5000,5000,score))%>%
+  mutate(score=round(score,0))%>%
   mutate(highlights = ifelse(
     score %in% c(100, 500, 1000, 2000, 3000, 4000, 5000),
     score,
